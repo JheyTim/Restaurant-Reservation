@@ -2,7 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 const logger = require('./config/logger');
-// const authRoutes = require('./routes/auth');
+const authRoutes = require('./routes/auth');
 // const reservationRoutes = require('./routes/reservation');
 // const adminRoutes = require('./routes/admin');
 
@@ -25,7 +25,7 @@ app.use((req, _, next) => {
 });
 
 // Routers
-// app.use('/api/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 // app.use('/api/reservations', reservationRoutes);
 // app.use('/api/admin', adminRoutes);
 

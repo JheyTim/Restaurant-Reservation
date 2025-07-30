@@ -1,6 +1,5 @@
-const mongoose = require('mongoose');
 const Table = require('../src/models/table');
-const { connectInMemoryDB, disconnectInMemoryDB } = require('./db.mock'); // mock DB
+const { connectInMemoryDB, disconnectInMemoryDB } = require('./utils/db.mock'); // mock DB
 
 beforeAll(async () => {
   await connectInMemoryDB();

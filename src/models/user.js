@@ -22,7 +22,7 @@ const UserSchema = new mongoose.Schema(
       minlength: 8,
       select: false, // omit by default on queries
     },
-    roles: {
+    role: {
       type: String,
       enum: ['customer', 'admin'],
       default: 'customer',
