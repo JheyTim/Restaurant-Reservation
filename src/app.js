@@ -1,10 +1,11 @@
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
+const client = require('prom-client');
 const logger = require('./config/logger');
 const authRoutes = require('./routes/auth');
-// const reservationRoutes = require('./routes/reservation');
-// const adminRoutes = require('./routes/admin');
+const reservationRoutes = require('./routes/reservation');
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 
@@ -24,10 +25,28 @@ app.use((req, _, next) => {
   next();
 });
 
+const httpReqs = new client.Counter({
+  name: 'http_requests_total',
+  help: 'Total HTTP requests',
+  labelNames: ['method', 'route', 'role'],
+});
+
+app.use((req, res, next) => {
+  const end = res.on.bind(res, 'finish', () => {
+    httpReqs.inc({
+      method: req.method,
+      route: req.route?.path ?? 'unknown',
+      role: req.user?.role ?? 'anon',
+    });
+  });
+  res.on('finish', end);
+  next();
+});
+
 // Routers
 app.use('/api/auth', authRoutes);
-// app.use('/api/reservations', reservationRoutes);
-// app.use('/api/admin', adminRoutes);
+app.use('/api/reservations', reservationRoutes);
+app.use('/api/admin', adminRoutes);
 
 /* Health‑check endpoint for k8s / LB */
 app.get('/health', (_, res) => res.send('OK'));

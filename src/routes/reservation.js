@@ -1,2 +1,6 @@
-// const { Router } = require('express');
-// module.exports = Router().all('*', (_, res) => res.sendStatus(501));
+const { Router } = require('express');
+const { allowRoles } = require('../middleware/allowRoles.js');
+//  allowRoles('customer')
+const router = Router();
+
+module.exports = router;
